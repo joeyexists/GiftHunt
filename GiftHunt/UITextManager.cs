@@ -1,6 +1,5 @@
 ﻿using MelonLoader;
 using System.Collections;
-using HarmonyLib;
 using TMPro;
 using UnityEngine;
 using Color = UnityEngine.Color;
@@ -189,18 +188,13 @@ namespace GiftHunt
             }
         }
 
-        [HarmonyPatch(typeof(MenuScreenOptionsPanel), "ApplyChanges")]
-        public static class PostApplyChanges
+        internal static void MenuScreenOptionsPanel_ApplyChanges_Postfix()
         {
-            [HarmonyPostfix]
-            static void Postfix()
-            {
-                // resize text on resolution change
-                scale = GameDataManager.prefs.resHeight / 1440f;
+            // resize text on resolution change
+            scale = GameDataManager.prefs.resHeight / 1440f;
 
-                PopupText.Resize();
-                TimeText.Resize();
-            }
+            PopupText.Resize();
+            TimeText.Resize();
         }
     }
 }
