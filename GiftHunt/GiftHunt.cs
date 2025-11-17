@@ -4,7 +4,7 @@ using UniverseLib.Input;
 using GiftHunt.Gifts;
 using GiftHunt.UI;
 
-[assembly: MelonInfo(typeof(GiftHunt.GiftHunt), "GiftHunt", "1.0.0", "joeyexists", null)]
+[assembly: MelonInfo(typeof(GiftHunt.GiftHunt), "GiftHunt", "1.1.0", "joeyexists", null)]
 [assembly: MelonGame("Little Flag Software, LLC", "Neon White")]
 [assembly: MelonColor(204, 255, 138, 25)]
 
@@ -83,6 +83,12 @@ namespace GiftHunt
             if (InputManager.GetKeyDown(Settings.LoadGiftKeyEntry.Value))
             {
                 GiftManager.OnGiftSeedEntryValueChanged(GUIUtility.systemCopyBuffer);
+                return;
+            }
+
+            if (InputManager.GetKeyDown(Settings.ClearGiftKeyEntry.Value))
+            {
+                GiftManager.ClearActiveGiftData();
             }
         }
     }

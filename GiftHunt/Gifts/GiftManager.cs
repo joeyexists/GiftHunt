@@ -92,6 +92,16 @@ namespace GiftHunt.Gifts
             return true;
         }
 
+        public static void ClearActiveGiftData()
+        {
+            if (ActiveGiftData == null)
+                return;
+
+            ActiveGiftData = null;
+            DestroyLastSpawnedGift();
+            PopupManager.InfoText.DisplayMessage("Gift Seed Cleared.");
+        }
+
         private static bool TrySpawnGift(GiftData giftData)
         {
             if (!CanSpawnGift(giftData)) return false;

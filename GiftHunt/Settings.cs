@@ -12,6 +12,7 @@ namespace GiftHunt
 
         public static MelonPreferences_Entry<KeyCode> HideGiftKeyEntry { get; private set; }
         public static MelonPreferences_Entry<KeyCode> LoadGiftKeyEntry { get; private set; }
+        public static MelonPreferences_Entry<KeyCode> ClearGiftKeyEntry { get; private set; }
 
         public static void Initialize()
         {
@@ -26,6 +27,8 @@ namespace GiftHunt
                 description: "Generates a gift seed based on your current position and copies it to the clipboard.");
             LoadGiftKeyEntry = category.CreateEntry("Load Gift Seed Hotkey", KeyCode.Backslash,
                 description: "Loads a gift seed from your clipboard.");
+            ClearGiftKeyEntry = category.CreateEntry("Clear Gift Seed Hotkey", KeyCode.None,
+                description: "Clears the currently loaded gift seed.");
 
             ModEnabledEntry.OnEntryValueChanged.Subscribe((_, enable) =>
                 GiftHunt.SetModActive(enable));
