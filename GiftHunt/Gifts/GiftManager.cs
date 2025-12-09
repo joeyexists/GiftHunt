@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using GiftHunt.LevelUtils;
 using GiftHunt.UI;
+using MelonLoader;
 
 namespace GiftHunt.Gifts
 {
@@ -8,6 +9,7 @@ namespace GiftHunt.Gifts
     {
         public static GiftData ActiveGiftData { get; private set; } = null;
         public static GameObject LastSpawnedGift { get; private set; } = null;
+        public static string LastCreatedGiftSeed { get; set; } = null;
 
         public const float GiftBoxScaleFactor = 0.75f;
         private const float GiftAmbienceRadius = 15.9f;
@@ -150,16 +152,32 @@ namespace GiftHunt.Gifts
             DestroyLastSpawnedGift();
 
             long collectTimeMs = GiftHunt.Game.GetCurrentLevelTimerMicroseconds() / 1000;
-            if (collectTimeMs <= 17) return; // ~1 frame
+            if (collectTimeMs <= 17 || ActiveGiftData == null) return;
 
-            long personalBestMs = ActiveGiftData?.PersonalBestMs ?? 0;
+            long personalBestMs = ActiveGiftData.PersonalBestMs;
             if (personalBestMs == 0 || personalBestMs > collectTimeMs)
-            {
-                if (ActiveGiftData != null)
-                    ActiveGiftData.PersonalBestMs = collectTimeMs;
-            }
+                ActiveGiftData.PersonalBestMs = collectTimeMs;
 
-            long devTimeMs = ActiveGiftData?.DevTimeMs ?? 0;
+            long devTimeMs = ActiveGiftData.DevTimeMs;
+
+            if (Settings.AutoUpdateDevTimesEntry.Value)
+            {
+                var beatDevTimeThisAttempt = collectTimeMs < devTimeMs;
+                if (beatDevTimeThisAttempt && ActiveGiftData.Seed == LastCreatedGiftSeed)
+                {
+                    var updatedSeed = GiftSeedUtility.UpdateGiftSeedWithNewDevTime(ActiveGiftData.Seed, collectTimeMs);
+
+                    if (!string.IsNullOrWhiteSpace(updatedSeed) && TrySetActiveGiftData(updatedSeed, out var _))
+                    {
+                        LastCreatedGiftSeed = updatedSeed;
+                        ActiveGiftData.PersonalBestMs = collectTimeMs;
+
+                        GUIUtility.systemCopyBuffer = updatedSeed;
+                        PopupManager.InfoText.DisplayMessage("Updated Dev Time!");
+                        MelonLogger.Msg($"Updated gift seed: {updatedSeed}");
+                    }
+                }
+            }
 
             DisplayTimeFeedback(collectTimeMs, devTimeMs, personalBestMs);
         }

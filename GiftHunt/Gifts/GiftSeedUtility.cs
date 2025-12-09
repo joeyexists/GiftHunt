@@ -70,6 +70,20 @@ namespace GiftHunt.Gifts
             return true;
         }
 
+        public static string UpdateGiftSeedWithNewDevTime(string seed, long devTimeMs)
+        {
+            string[] parts = seed.Split(':');
+            if (parts.Length != 3 && string.IsNullOrWhiteSpace(parts[2]))
+                return null; // seed has no dev time
+
+            devTimeMs = (long)Mathf.Clamp(devTimeMs, 0, MaxDevTimeMs);
+            var devTimeEncoded = Base64Utils.PackUInt((uint)devTimeMs);
+
+            parts[2] = devTimeEncoded;
+
+            return string.Join(":", parts);
+        }
+
         public static bool TryDecodeGiftSeed(string seed, out GiftData giftData)
         {
             giftData = null;
@@ -99,7 +113,7 @@ namespace GiftHunt.Gifts
                     devTimeMs = 0;
             }
 
-            giftData = new GiftData(position, levelId, devTimeMs);
+            giftData = new GiftData(position, levelId, devTimeMs, seed);
             return true;
         }
 

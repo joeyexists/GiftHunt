@@ -14,6 +14,8 @@ namespace GiftHunt
         public static MelonPreferences_Entry<KeyCode> LoadGiftKeyEntry { get; private set; }
         public static MelonPreferences_Entry<KeyCode> ClearGiftKeyEntry { get; private set; }
 
+        public static MelonPreferences_Entry<bool> AutoUpdateDevTimesEntry { get; private set; }
+
         public static void Initialize()
         {
             var category = MelonPreferences.CreateCategory(GiftHunt.ModInstance.Info.Name);
@@ -29,6 +31,9 @@ namespace GiftHunt
                 description: "Loads a gift seed from your clipboard.");
             ClearGiftKeyEntry = category.CreateEntry("Clear Gift Seed Hotkey", KeyCode.None,
                 description: "Clears the currently loaded gift seed.");
+            AutoUpdateDevTimesEntry = category.CreateEntry("Auto Update Dev Times", true,
+                description: "When enabled, collecting a gift after setting it will generate a new gift seed with the updated dev time. " +
+                "The updated seed is automatically loaded and copied to the clipboard.");
 
             ModEnabledEntry.OnEntryValueChanged.Subscribe((_, enable) =>
                 GiftHunt.SetModActive(enable));

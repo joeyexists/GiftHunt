@@ -71,6 +71,7 @@ namespace GiftHunt
                     GUIUtility.systemCopyBuffer = seed;
                     PopupManager.InfoText?.DisplayMessage("Gift Seed Copied to Clipboard!");
                     MelonLogger.Msg($"Generated gift seed: {seed}");
+                    GiftManager.LastCreatedGiftSeed = seed;
                 }
                 else
                 {
