@@ -4,7 +4,7 @@ using UniverseLib.Input;
 using GiftHunt.Gifts;
 using GiftHunt.UI;
 
-[assembly: MelonInfo(typeof(GiftHunt.GiftHunt), "GiftHunt", "1.1.0", "joeyexists", null)]
+[assembly: MelonInfo(typeof(GiftHunt.GiftHunt), "GiftHunt", "1.2.0", "joeyexists", null)]
 [assembly: MelonGame("Little Flag Software, LLC", "Neon White")]
 [assembly: MelonColor(204, 255, 138, 25)]
 
